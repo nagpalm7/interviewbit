@@ -71,7 +71,7 @@ class IntervieweeDetail(APIView):
     def get_object(self, pk):
         try:
             return Interviewee.objects.get(pk=pk)
-        except Interviewer.DoesNotExist:
+        except Interviewee.DoesNotExist:
             raise Http404
 
     def get(self, request, pk, format=None):
@@ -112,7 +112,7 @@ class InterviewDetail(APIView):
     def get_object(self, pk):
         try:
             return Interview.objects.get(pk=pk)
-        except Interviewer.DoesNotExist:
+        except Interview.DoesNotExist:
             raise Http404
 
     def get(self, request, pk, format=None):
