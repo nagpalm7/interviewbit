@@ -1,26 +1,31 @@
 import React from "react";
-import logo from "./logo.svg";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import "./App.css";
 
-function App() {
+import routes from "./routes/routes";
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Switch>
+        {routes.map(
+          ({ exact, path, component: Component, layout: Layout }, index) => (
+            <Route
+              key={index}
+              exact={exact}
+              path={path}
+              render={(props) => (
+                <Layout history={props.history}>
+                  <Component {...props} />
+                </Layout>
+              )}
+            />
+          )
+        )}
+        {/* <Route component={NotFoundPage} /> */}
+      </Switch>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
