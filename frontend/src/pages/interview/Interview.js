@@ -22,6 +22,8 @@ class Interview extends React.Component {
     };
   }
 
+  add_form_ref = React.createRef();
+
   componentDidMount() {
     this.fetch_data();
     this.fetch_interviewers();
@@ -106,6 +108,7 @@ class Interview extends React.Component {
   };
 
   hide_add_modal = () => {
+    this.add_form_ref.current.resetFields();
     this.setState({
       visible: false,
     });
@@ -168,6 +171,7 @@ class Interview extends React.Component {
             submit_add_form={this.submit_add_form}
             interviewees={interviewees}
             interviewers={interviewers}
+            add_form_ref={this.add_form_ref}
           />
         </Modal>
         <CustomTable

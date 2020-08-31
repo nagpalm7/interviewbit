@@ -5,7 +5,12 @@ class AddForm extends React.Component {
   render() {
     const { Option } = Select;
     const { RangePicker } = DatePicker;
-    const { submit_add_form, interviewers, interviewees } = this.props;
+    const {
+      submit_add_form,
+      interviewers,
+      interviewees,
+      add_form_ref,
+    } = this.props;
     return (
       <div>
         <Form
@@ -13,6 +18,7 @@ class AddForm extends React.Component {
           name="add_form"
           onFinish={submit_add_form}
           id="add-form"
+          ref={add_form_ref}
         >
           <Form.Item
             name="name"
