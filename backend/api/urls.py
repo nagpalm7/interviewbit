@@ -6,27 +6,27 @@ from api import views
 urlpatterns = [
 
     # url for interviewer
-    url(r'^interviewer/$',
+    url(r'^interviewers/$',
         views.InterviewerList.as_view(),
         name='interviewer-list'),
-    url(r'interviewer/(?P<pk>\d+)/$',
+    url(r'interviewers/(?P<pk>\d+)/$',
         views.InterviewerDetail.as_view(),
         name='interviewer-detail'),
 
 
     # url for interviewee
-    url(r'interviewee/$',
+    url(r'interviewees/$',
         views.IntervieweeList.as_view(),
         name='interviewee-list'),
-    url(r'interviewee/(?P<pk>\d+)/$',
+    url(r'interviewees/(?P<pk>\d+)/$',
         views.IntervieweeDetail.as_view(),
         name='interviewee-detail'),
 
     # url for interview
-    url(r'interview/$',
+    url(r'interviews/$',
         views.InterviewList.as_view(),
         name='interview-list'),
-    url(r'interview/(?P<pk>\d+)/$',
+    url(r'interviews/(?P<pk>\d+)/$',
         views.InterviewDetail.as_view(),
         name='interview-detail'),
 
