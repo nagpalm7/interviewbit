@@ -68,8 +68,7 @@ class PageLayout extends React.Component {
             style={{
               padding: 0,
               color: "white",
-              fontSize: "22px",
-              padding: "8px",
+              fontSize: "16px",
             }}
           >
             {React.createElement(

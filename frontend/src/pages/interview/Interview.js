@@ -1,7 +1,12 @@
 import React from "react";
+import CustomTable from "../../components/Table/Table";
 
 const Interviewer = () => {
-  return <div>Lets Go Interview</div>;
+  return (
+    <div>
+      <CustomTable />
+    </div>
+  );
 };
 
 export default Interviewer;
