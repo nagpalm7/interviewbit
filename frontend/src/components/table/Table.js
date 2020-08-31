@@ -5,7 +5,13 @@ import "./Table.css";
 class CustomTable extends React.Component {
   render() {
     const { Column } = Table;
-    const { title, show_add_modal, dataSource, columns } = this.props;
+    const {
+      title,
+      show_add_modal,
+      dataSource,
+      columns,
+      show_confirm_delete,
+    } = this.props;
 
     return (
       <div className="site-card-border-less-wrapper">
@@ -32,7 +38,9 @@ class CustomTable extends React.Component {
               render={(text, record) => (
                 <Space size="middle">
                   <Button>Edit</Button>
-                  <Button>Delete</Button>
+                  <Button onClick={() => show_confirm_delete(record.key)}>
+                    Delete
+                  </Button>
                 </Space>
               )}
             />

@@ -1,9 +1,10 @@
 import React from "react";
 import axios from "axios";
 import moment from "moment";
-import { Modal, Button } from "antd";
+import { Modal } from "antd";
 import CustomTable from "../../components/table/Table";
 import AddForm from "../../components/interview/AddForm";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 const url = "http://localhost:8000/api/interviews/";
 const url_interviewers = "http://localhost:8000/api/interviewers/";
@@ -115,13 +116,6 @@ class Interview extends React.Component {
   };
 
   // Add form helper functions
-  // handle_form_change = (fields) => {
-  //   if (fields.length)
-  //     this.setState({
-  //       [fields[0].name[0]]: fields[0].value,
-  //     });
-  // };
-
   submit_add_form = (event) => {
     this.setState(
       {
@@ -144,6 +138,35 @@ class Interview extends React.Component {
     );
   };
 
+  // Delete modal helper functions
+  show_confirm_delete = (id) => {
+    console.log(id);
+    const { confirm } = Modal;
+    confirm({
+      title: "Do you Want to delete this interview?",
+      icon: <ExclamationCircleOutlined />,
+      onOk: () => {
+        this.handle_delete(id);
+      },
+      onCancel: () => {
+        console.log("Cancel");
+      },
+    });
+  };
+
+  // Delete request function
+  handle_delete(id) {
+    console.log(id);
+    axios
+      .delete(url + id)
+      .then((response) => {
+        this.fetch_data();
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  }
+
   render() {
     const {
       visible,
@@ -155,6 +178,7 @@ class Interview extends React.Component {
 
     return (
       <div className="site-card-border-less-wrapper">
+        {/* Add modal */}
         <Modal
           title="Add Interview"
           visible={visible}
@@ -174,11 +198,13 @@ class Interview extends React.Component {
             add_form_ref={this.add_form_ref}
           />
         </Modal>
+
         <CustomTable
           dataSource={data}
           columns={columns}
           title="Interviews"
           show_add_modal={this.show_add_modal}
+          show_confirm_delete={this.show_confirm_delete}
         />
       </div>
     );
