@@ -76,7 +76,7 @@ class EditForm extends React.Component {
             <Select allowClear>
               {interviewees.map((interviewee) => (
                 <Option value={JSON.stringify(interviewee.key)}>
-                  {interviewee.name} ({interviewee.key})
+                  {interviewee.name}
                 </Option>
               ))}
             </Select>
