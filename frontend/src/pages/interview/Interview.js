@@ -1,12 +1,32 @@
 import React from "react";
+import axios from "axios";
+
+const url = "http://localhost:8000/api/interview/";
 
 class CustomTable extends React.Component {
   constructor(props) {
+    super(props);
     this.state = {
       data: [],
       columns: [],
     };
   }
+
+  componentDidMount() {
+    this.fetch_data();
+  }
+
+  fetch_data() {
+    axios
+      .get(url)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
   render() {
     return (
       <div className="site-card-border-less-wrapper">
