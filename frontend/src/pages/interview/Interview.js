@@ -38,7 +38,7 @@ class Interview extends React.Component {
           response.data.map((interview) => {
             let data_object = {
               key: interview.id,
-              title: interview.name,
+              name: interview.name,
               interviewer: interview.interviewer.name,
               interviewee: interview.interviewee.name,
               start: moment(interview.start).format("lll"),
@@ -120,10 +120,25 @@ class Interview extends React.Component {
   // };
 
   submit_add_form = (event) => {
-    this.setState({
-      addLoading: true,
-    });
-    console.log(event);
+    this.setState(
+      {
+        addLoading: true,
+      },
+      () => {
+        axios
+          .post(url, event)
+          .then((response) => {
+            console.log(response);
+            this.setState({ addLoading: false });
+            this.fetch_data();
+            this.hide_add_modal();
+          })
+          .catch((error) => {
+            this.setState({ addLoading: false });
+            console.log(error);
+          });
+      }
+    );
   };
 
   render() {
@@ -171,8 +186,8 @@ export default Interview;
 const columns = [
   {
     title: "Title",
-    dataIndex: "title",
-    key: "title",
+    dataIndex: "name",
+    key: "name",
   },
   {
     title: "Interviewer",

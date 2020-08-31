@@ -15,7 +15,7 @@ class AddForm extends React.Component {
           id="add-form"
         >
           <Form.Item
-            name="title"
+            name="name"
             label="Title"
             rules={[
               {
