@@ -15,6 +15,9 @@ class IntervieweeSerializer(serializers.ModelSerializer):
 
 
 class InterviewSerializer(serializers.ModelSerializer):
+    interviewer = InterviewerSerializer()
+    interviewee = IntervieweeSerializer()
+
     class Meta:
         model = Interview
         fields = '__all__'
