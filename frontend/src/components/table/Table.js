@@ -9,7 +9,7 @@ class CustomTable extends React.Component {
         <Card
           title={this.props.title}
           bordered={false}
-          extra={<Button>Add</Button>}
+          extra={<Button onClick={this.props.show_add_modal}>Add</Button>}
           style={{ width: "100%" }}
         >
           <Table

@@ -13,7 +13,7 @@ const Home = () => {
           render={(props) => <Component {...props} />}
         />
       ))}
-      <Redirect from="/" to="/interviewer" />
+      <Redirect from="/" to="/interview" />
     </Switch>
   );
 };

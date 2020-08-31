@@ -1,5 +1,5 @@
 import React from "react";
-import CustomTable from "../../components/Table/Table";
+import CustomTable from "../../components/table/Table";
 
 const Interviewer = () => {
   return (
