@@ -155,6 +155,7 @@ class InterviewDetail(APIView):
         start = request.data['start']
         end = request.data['end']
         interviewer = request.data['interviewer']
+        interviewee = request.data['interviewee']
         # Check whether slot is available or not for the interviewer
         interviews = Interview.objects.filter(interviewer__id=interviewer).filter(
             start__lte=end).filter(end__gte=start).exclude(pk=pk)
@@ -172,6 +173,15 @@ class InterviewDetail(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
         if serializer.is_valid():
             serializer.save()
+            subject = "Interview Schedule Updated"
+            content = """
+            Respected Sir/Madam, <br>
+            This is to inform that an interview has been scheduled from {} to {}
+            """.format(start, end)
+            interviewee_details = Interviewee.objects.get(pk=interviewee)
+            interviewer_details = Interviewer.objects.get(pk=interviewer)
+            email = [interviewer_details.email, interviewee_details.email]
+            send_email(subject, content, email)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
