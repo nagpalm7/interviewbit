@@ -23,6 +23,7 @@ class Interview extends React.Component {
       add_loading: false,
       edit_visible: false,
       edit_loading: false,
+      key: null,
     };
   }
 
@@ -159,18 +160,25 @@ class Interview extends React.Component {
   };
 
   // Edit modal helper functions
-  show_edit_modal = (record) => {
-    this.setState({
+  show_edit_modal = async (record) => {
+    await this.setState({
       edit_visible: true,
+      key: record.key,
     });
-    setTimeout(() => {
+    axios.get(url + record.key).then((res) => {
+      record = res.data;
       console.log(this.edit_form_ref);
-      this.edit_form_ref.current.setFieldsValue(record);
-    }, 10000);
+      let data = {
+        name: record.name,
+        interviewer: JSON.stringify(record.interviewer.id),
+        interviewee: JSON.stringify(record.interviewee.id),
+        date: [moment(record.start), moment(record.end)],
+      };
+      this.edit_form_ref.current.setFieldsValue(data);
+    });
   };
 
   hide_edit_modal = () => {
-    console.log(this.edit_form_ref);
     this.edit_form_ref.current.resetFields();
     this.setState({
       edit_visible: false,
@@ -184,16 +192,34 @@ class Interview extends React.Component {
         edit_loading: true,
       },
       () => {
+        console.log(event);
+        let data = {
+          name: event.name,
+          interviewer: parseInt(event.interviewer),
+          interviewee: parseInt(event.interviewee),
+          start: event.date[0],
+          end: event.date[1],
+        };
         axios
-          .post(url, event)
+          .put(url + this.state.key + "/", data)
           .then((response) => {
             this.setState({ edit_loading: false });
             this.fetch_data();
             this.hide_edit_modal();
           })
           .catch((error) => {
+            let e = error.response.data;
+            if (e.errors != undefined) {
+              let msg = e.errors.date[0];
+              console.log(msg);
+              this.edit_form_ref.current.setFields([
+                {
+                  name: "date",
+                  errors: [msg],
+                },
+              ]);
+            }
             this.setState({ edit_loading: false });
-            console.log(error);
           });
       }
     );
@@ -274,7 +300,7 @@ class Interview extends React.Component {
           }}
         >
           <EditForm
-            submit_add_form={this.submit_edit_form}
+            submit_edit_form={this.submit_edit_form}
             interviewees={interviewees}
             interviewers={interviewers}
             edit_form_ref={this.edit_form_ref}

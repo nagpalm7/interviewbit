@@ -15,9 +15,9 @@ class EditForm extends React.Component {
       <div>
         <Form
           layout="vertical"
-          name="add_form"
+          name="edit_form"
           onFinish={submit_edit_form}
-          id="add-form"
+          id="edit-form"
           ref={edit_form_ref}
         >
           <Form.Item
@@ -57,7 +57,9 @@ class EditForm extends React.Component {
           >
             <Select allowClear>
               {interviewers.map((interviewer) => (
-                <Option value={interviewer.key}>{interviewer.name}</Option>
+                <Option value={JSON.stringify(interviewer.key)}>
+                  {interviewer.name}
+                </Option>
               ))}
             </Select>
           </Form.Item>
@@ -73,7 +75,9 @@ class EditForm extends React.Component {
           >
             <Select allowClear>
               {interviewees.map((interviewee) => (
-                <Option value={interviewee.key}>{interviewee.name}</Option>
+                <Option value={JSON.stringify(interviewee.key)}>
+                  {interviewee.name} ({interviewee.key})
+                </Option>
               ))}
             </Select>
           </Form.Item>
