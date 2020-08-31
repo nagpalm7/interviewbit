@@ -4,6 +4,7 @@ import moment from "moment";
 import { Modal } from "antd";
 import CustomTable from "../../components/table/Table";
 import AddForm from "../../components/interview/AddForm";
+import EditForm from "../../components/interview/EditForm";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 const url = "http://localhost:8000/api/interviews/";
@@ -18,11 +19,14 @@ class Interview extends React.Component {
       columns: [],
       interviewers: [],
       interviewees: [],
-      visible: false,
-      addLoading: false,
+      add_visible: false,
+      add_loading: false,
+      edit_visible: false,
+      edit_loading: false,
     };
   }
 
+  edit_form_ref = React.createRef();
   add_form_ref = React.createRef();
 
   componentDidMount() {
@@ -104,14 +108,14 @@ class Interview extends React.Component {
   // Add modal helper functions
   show_add_modal = () => {
     this.setState({
-      visible: true,
+      add_visible: true,
     });
   };
 
   hide_add_modal = () => {
     this.add_form_ref.current.resetFields();
     this.setState({
-      visible: false,
+      add_visible: false,
     });
   };
 
@@ -119,19 +123,66 @@ class Interview extends React.Component {
   submit_add_form = (event) => {
     this.setState(
       {
-        addLoading: true,
+        add_loading: true,
+      },
+      () => {
+        let data = {
+          name: event.name,
+          interviewer: event.interviewer,
+          interviewee: event.interviewee,
+          start: event.date[0],
+          end: event.date[1],
+        };
+        axios
+          .post(url, data)
+          .then((response) => {
+            this.setState({ add_loading: false });
+            this.fetch_data();
+            this.hide_add_modal();
+          })
+          .catch((error) => {
+            this.setState({ add_loading: false });
+            console.log(error);
+          });
+      }
+    );
+  };
+
+  // Edit modal helper functions
+  show_edit_modal = (record) => {
+    this.setState({
+      edit_visible: true,
+    });
+    setTimeout(() => {
+      console.log(this.edit_form_ref);
+      this.edit_form_ref.current.setFieldsValue(record);
+    }, 10000);
+  };
+
+  hide_edit_modal = () => {
+    console.log(this.edit_form_ref);
+    this.edit_form_ref.current.resetFields();
+    this.setState({
+      edit_visible: false,
+    });
+  };
+
+  // Edit form helper functions
+  submit_edit_form = (event) => {
+    this.setState(
+      {
+        edit_loading: true,
       },
       () => {
         axios
           .post(url, event)
           .then((response) => {
-            console.log(response);
-            this.setState({ addLoading: false });
+            this.setState({ edit_loading: false });
             this.fetch_data();
-            this.hide_add_modal();
+            this.hide_edit_modal();
           })
           .catch((error) => {
-            this.setState({ addLoading: false });
+            this.setState({ edit_loading: false });
             console.log(error);
           });
       }
@@ -169,8 +220,10 @@ class Interview extends React.Component {
 
   render() {
     const {
-      visible,
-      addLoading,
+      add_visible,
+      add_loading,
+      edit_visible,
+      edit_loading,
       data,
       interviewees,
       interviewers,
@@ -178,12 +231,11 @@ class Interview extends React.Component {
 
     return (
       <div className="site-card-border-less-wrapper">
-        {/* Add modal */}
         <Modal
           title="Add Interview"
-          visible={visible}
+          visible={add_visible}
           style={{ top: 20 }}
-          confirmLoading={addLoading}
+          confirmLoading={add_loading}
           onCancel={this.hide_add_modal}
           okButtonProps={{
             form: "add-form",
@@ -199,11 +251,32 @@ class Interview extends React.Component {
           />
         </Modal>
 
+        <Modal
+          title="Edit Interview"
+          visible={edit_visible}
+          style={{ top: 20 }}
+          confirmLoading={edit_loading}
+          onCancel={this.hide_edit_modal}
+          okButtonProps={{
+            form: "edit-form",
+            key: "submit",
+            htmlType: "submit",
+          }}
+        >
+          <EditForm
+            submit_add_form={this.submit_edit_form}
+            interviewees={interviewees}
+            interviewers={interviewers}
+            edit_form_ref={this.edit_form_ref}
+          />
+        </Modal>
+
         <CustomTable
           dataSource={data}
           columns={columns}
           title="Interviews"
           show_add_modal={this.show_add_modal}
+          show_edit_modal={this.show_edit_modal}
           show_confirm_delete={this.show_confirm_delete}
         />
       </div>

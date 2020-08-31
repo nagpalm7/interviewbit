@@ -11,6 +11,7 @@ class CustomTable extends React.Component {
       dataSource,
       columns,
       show_confirm_delete,
+      show_edit_modal,
     } = this.props;
 
     return (
@@ -37,7 +38,7 @@ class CustomTable extends React.Component {
               key="action"
               render={(text, record) => (
                 <Space size="middle">
-                  <Button>Edit</Button>
+                  <Button onClick={() => show_edit_modal(record)}>Edit</Button>
                   <Button onClick={() => show_confirm_delete(record.key)}>
                     Delete
                   </Button>
