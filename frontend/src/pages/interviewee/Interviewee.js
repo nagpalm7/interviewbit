@@ -1,7 +1,7 @@
 import React from "react";
 
 const Interviewer = () => {
-  return <div>Lets Go Interviewee</div>;
+  return <div>Interviewee Route</div>;
 };
 
 export default Interviewer;
