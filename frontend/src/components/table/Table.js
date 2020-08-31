@@ -1,21 +1,42 @@
 import React from "react";
-import { Table, Card, Button } from "antd";
+import { Table, Card, Button, Space } from "antd";
 import "./Table.css";
 
 class CustomTable extends React.Component {
   render() {
+    const { Column } = Table;
+    const { title, show_add_modal, dataSource, columns } = this.props;
+
     return (
       <div className="site-card-border-less-wrapper">
         <Card
-          title={this.props.title}
+          title={title}
           bordered={false}
-          extra={<Button onClick={this.props.show_add_modal}>Add</Button>}
+          extra={<Button onClick={show_add_modal}>Add</Button>}
           style={{ width: "100%" }}
         >
           <Table
-            dataSource={this.props.dataSource}
-            columns={this.props.columns}
-          />
+            dataSource={dataSource}
+            // columns={columns}
+          >
+            {columns.map((record) => (
+              <Column
+                title={record.title}
+                dataIndex={record.dataIndex}
+                key={record.key}
+              />
+            ))}
+            <Column
+              title="Action"
+              key="action"
+              render={(text, record) => (
+                <Space size="middle">
+                  <Button>Edit</Button>
+                  <Button>Delete</Button>
+                </Space>
+              )}
+            />
+          </Table>
         </Card>
       </div>
     );
