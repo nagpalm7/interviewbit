@@ -145,14 +145,10 @@ class Interview extends React.Component {
             let e = error.response.data;
             if (e.errors != undefined) {
               let msg = e.errors.date[0];
-              let slots = [];
-              for (var slot in e.errors.booked_slots) {
-                slots.push(slot[0] + " - " + slot[1]);
-              }
               this.add_form_ref.current.setFields([
                 {
                   name: "date",
-                  errors: [msg, ...slots],
+                  errors: [msg],
                 },
               ]);
             }
@@ -214,14 +210,10 @@ class Interview extends React.Component {
             let e = error.response.data;
             if (e.errors != undefined) {
               let msg = e.errors.date[0];
-              let slots = [];
-              for (var slot in e.errors.booked_slots) {
-                slots.push(slot[0] + " - " + slot[1]);
-              }
               this.edit_form_ref.current.setFields([
                 {
                   name: "date",
-                  errors: [msg, ...slots],
+                  errors: [msg],
                 },
               ]);
             }

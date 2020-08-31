@@ -111,15 +111,7 @@ class InterviewList(APIView):
             start__lte=end).filter(end__gte=start)
 
         if len(interviews):
-            bookedslots = Interview.objects.filter(
-                interviewer__id=interviewer).filter(start__gte=start)[:10]
-            slots = []
-            for interview in bookedslots:
-                slots.append([interview.start, interview.end])
-            for interview in interviews:
-                slots.append([interview.start, interview.end])
-            return Response({'errors': {'date': ['This time slot is already taken. Booked slots are:- '],
-                                        'booked_slots': slots}},
+            return Response({'errors': {'date': ['This time slot is already taken. Booked slots are:- '], }},
                             status=status.HTTP_400_BAD_REQUEST)
         serializer = AddInterviewSerializer(data=request.data)
         if serializer.is_valid():
@@ -161,15 +153,7 @@ class InterviewDetail(APIView):
             start__lte=end).filter(end__gte=start).exclude(pk=pk)
 
         if len(interviews):
-            bookedslots = Interview.objects.filter(
-                interviewer__id=interviewer).filter(start__gte=start).exclude(pk=pk)[:10]
-            slots = []
-            for interview in bookedslots:
-                slots.append([interview.start, interview.end])
-            for interview in interviews:
-                slots.append([interview.start, interview.end])
-            return Response({'errors': {'date': ['This time slot is already taken. Booked slots are:- '],
-                                        'booked_slots': slots}},
+            return Response({'errors': {'date': ['This time slot is already taken. Booked slots are:- '], }},
                             status=status.HTTP_400_BAD_REQUEST)
         if serializer.is_valid():
             serializer.save()
