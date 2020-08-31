@@ -109,7 +109,8 @@ class InterviewList(APIView):
             start__lte=end).filter(end__gte=start)
         print(len(interviews), interviews)
         if len(interviews):
-            return Response({'errors': 'This time slot is already taken.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'errors': {'date': ['This time slot is already taken.']}},
+                            status=status.HTTP_400_BAD_REQUEST)
         serializer = AddInterviewSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()

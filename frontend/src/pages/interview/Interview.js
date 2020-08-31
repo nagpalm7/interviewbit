@@ -141,8 +141,18 @@ class Interview extends React.Component {
             this.hide_add_modal();
           })
           .catch((error) => {
+            let e = error.response.data;
+            if (e.errors != undefined) {
+              let msg = e.errors.date[0];
+              console.log(msg);
+              this.add_form_ref.current.setFields([
+                {
+                  name: "date",
+                  errors: [msg],
+                },
+              ]);
+            }
             this.setState({ add_loading: false });
-            console.log(error);
           });
       }
     );
