@@ -145,11 +145,11 @@ class InterviewDetail(APIView):
         interviewer = request.data['interviewer']
         # Check whether slot is available or not for the interviewer
         interviews = Interview.objects.filter(interviewer=interviewer).filter(
-            start__lte=end).filter(end__gte=start).exclude(id=pk)
+            start__lte=end).filter(end__gte=start).exclude(pk=pk)
 
         if len(interviews):
             bookedslots = Interview.objects.filter(
-                interviewer=interviewer).filter(start__gte=start).exclude(id=pk)[:10]
+                interviewer=interviewer).filter(start__gte=start).exclude(pk=pk)[:10]
             slots = []
             for interview in bookedslots:
                 slots.append([interview.start, interview.end])

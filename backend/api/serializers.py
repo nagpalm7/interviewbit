@@ -17,6 +17,8 @@ class IntervieweeSerializer(serializers.ModelSerializer):
 class InterviewSerializer(serializers.ModelSerializer):
     interviewer = InterviewerSerializer()
     interviewee = IntervieweeSerializer()
+    start = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+    end = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
 
     class Meta:
         model = Interview
