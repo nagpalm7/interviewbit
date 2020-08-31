@@ -107,7 +107,6 @@ class InterviewList(APIView):
         interviews = Interview.objects.filter(interviewer=interviewer).filter(
             start__lte=end).filter(end__gte=start)
 
-        print(len(interviews), interviews)
         if len(interviews):
             bookedslots = Interview.objects.filter(
                 interviewer=interviewer).filter(start__gte=start)[:10]
@@ -116,7 +115,7 @@ class InterviewList(APIView):
                 slots.append([interview.start, interview.end])
             for interview in interviews:
                 slots.append([interview.start, interview.end])
-            return Response({'errors': {'date': ['This time slot is already taken.'],
+            return Response({'errors': {'date': ['This time slot is already taken. Booked slots are:- '],
                                         'booked_slots': slots}},
                             status=status.HTTP_400_BAD_REQUEST)
         serializer = AddInterviewSerializer(data=request.data)

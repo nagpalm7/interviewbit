@@ -145,11 +145,18 @@ class Interview extends React.Component {
             let e = error.response.data;
             if (e.errors != undefined) {
               let msg = e.errors.date[0];
-              console.log(msg);
+              let slots = [];
+              for (var slot in e.errors.booked_slots) {
+                slots.push(
+                  moment(slot[0]).format("lll") +
+                    " - " +
+                    moment(slot[1]).format("lll")
+                );
+              }
               this.add_form_ref.current.setFields([
                 {
                   name: "date",
-                  errors: [msg],
+                  errors: [msg, ...slots],
                 },
               ]);
             }
