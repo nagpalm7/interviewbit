@@ -100,6 +100,16 @@ class InterviewList(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        print(request.data)
+        start = request.data['start']
+        end = request.data['end']
+        interviewer = request.data['interviewer']
+        # Check whether slot is available or not for the interviewer
+        interviews = Interview.objects.filter(interviewer=interviewer).filter(
+            start__lte=end).filter(end__gte=start)
+        print(len(interviews), interviews)
+        if len(interviews):
+            return Response({'errors': 'This time slot is already taken.'}, status=status.HTTP_400_BAD_REQUEST)
         serializer = AddInterviewSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
