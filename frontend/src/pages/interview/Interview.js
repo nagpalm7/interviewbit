@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import moment from "moment";
 import CustomTable from "../../components/Table/Table";
 
 const url = "http://localhost:8000/api/interview/";
@@ -17,21 +18,39 @@ class Interview extends React.Component {
     this.fetch_data();
   }
 
-  fetch_data() {
+  fetch_data = () => {
     axios
       .get(url)
-      .then(function (response) {
-        console.log(response);
+      .then((response) => {
+        if (response.data.length) {
+          let data = [];
+          response.data.map((interview) => {
+            let data_object = {
+              key: interview.pk,
+              title: interview.name,
+              interviewer: interview.interviewer.name,
+              interviewee: interview.interviewee.name,
+              start: moment(interview.start).format("lll"),
+              end: moment(interview.end).format("lll"),
+            };
+            data.push(data_object);
+          });
+          this.setState({ data: data });
+        }
       })
       .catch(function (error) {
         console.log(error);
       });
-  }
+  };
 
   render() {
     return (
       <div className="site-card-border-less-wrapper">
-        <CustomTable />
+        <CustomTable
+          dataSource={this.state.data}
+          columns={columns}
+          title="Interviews"
+        />
       </div>
     );
   }
@@ -39,35 +58,30 @@ class Interview extends React.Component {
 
 export default Interview;
 
-const dataSource = [
-  {
-    key: "1",
-    name: "Mike",
-    age: 32,
-    address: "10 Downing Street",
-  },
-  {
-    key: "2",
-    name: "John",
-    age: 42,
-    address: "10 Downing Street",
-  },
-];
-
 const columns = [
   {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
+    title: "Title",
+    dataIndex: "title",
+    key: "title",
   },
   {
-    title: "Age",
-    dataIndex: "age",
-    key: "age",
+    title: "Interviewer",
+    dataIndex: "interviewer",
+    key: "interviewer",
   },
   {
-    title: "Address",
-    dataIndex: "address",
-    key: "address",
+    title: "Interviewee",
+    dataIndex: "interviewee",
+    key: "interviewee",
+  },
+  {
+    title: "Start Time",
+    dataIndex: "start",
+    key: "start",
+  },
+  {
+    title: "End Time",
+    dataIndex: "end",
+    key: "end",
   },
 ];
