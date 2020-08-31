@@ -21,3 +21,9 @@ class InterviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Interview
         fields = '__all__'
+
+
+class AddInterviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Interview
+        fields = '__all__'

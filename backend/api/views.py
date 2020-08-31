@@ -101,7 +101,7 @@ class InterviewList(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = InterviewSerializer(data=request.data)
+        serializer = AddInterviewSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -122,7 +122,7 @@ class InterviewDetail(APIView):
 
     def put(self, request, pk, format=None):
         interview = self.get_object(pk)
-        serializer = InterviewSerializer(interview, data=request.data)
+        serializer = AddInterviewSerializer(interview, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
