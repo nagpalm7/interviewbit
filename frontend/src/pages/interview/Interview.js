@@ -5,7 +5,9 @@ import { Modal, Button } from "antd";
 import CustomTable from "../../components/table/Table";
 import AddForm from "../../components/interview/AddForm";
 
-const url = "http://localhost:8000/api/interview/";
+const url = "http://localhost:8000/api/interviews/";
+const url_interviewers = "http://localhost:8000/api/interviewers/";
+const url_interviewees = "http://localhost:8000/api/interviewees/";
 
 class Interview extends React.Component {
   constructor(props) {
@@ -13,7 +15,8 @@ class Interview extends React.Component {
     this.state = {
       data: [],
       columns: [],
-      ModalText: "Content of the modal",
+      interviewers: [],
+      interviewees: [],
       visible: false,
       addLoading: false,
     };
@@ -21,9 +24,11 @@ class Interview extends React.Component {
 
   componentDidMount() {
     this.fetch_data();
+    this.fetch_interviewers();
+    this.fetch_interviewees();
   }
 
-  // Fetch list of interviews
+  // Fetch list of Interviews
   fetch_data = () => {
     axios
       .get(url)
@@ -32,7 +37,7 @@ class Interview extends React.Component {
           let data = [];
           response.data.map((interview) => {
             let data_object = {
-              key: interview.pk,
+              key: interview.id,
               title: interview.name,
               interviewer: interview.interviewer.name,
               interviewee: interview.interviewee.name,
@@ -42,6 +47,50 @@ class Interview extends React.Component {
             data.push(data_object);
           });
           this.setState({ data: data });
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  // Fetch Interviewers
+  fetch_interviewers = () => {
+    axios
+      .get(url_interviewers)
+      .then((response) => {
+        if (response.data.length) {
+          let interviewers = [];
+          response.data.map((interviewer) => {
+            let data_object = {
+              key: interviewer.id,
+              name: interviewer.name,
+            };
+            interviewers.push(data_object);
+          });
+          this.setState({ interviewers: interviewers });
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  // Fetch Interviewees
+  fetch_interviewees = () => {
+    axios
+      .get(url_interviewees)
+      .then((response) => {
+        if (response.data.length) {
+          let interviewees = [];
+          response.data.map((interviewee) => {
+            let data_object = {
+              key: interviewee.id,
+              name: interviewee.name,
+            };
+            interviewees.push(data_object);
+          });
+          this.setState({ interviewees: interviewees });
         }
       })
       .catch(function (error) {
@@ -72,14 +121,19 @@ class Interview extends React.Component {
 
   submit_add_form = (event) => {
     this.setState({
-      ModalText: "The modal will be closed after two seconds",
       addLoading: true,
     });
     console.log(event);
   };
 
   render() {
-    const { visible, addLoading, ModalText } = this.state;
+    const {
+      visible,
+      addLoading,
+      data,
+      interviewees,
+      interviewers,
+    } = this.state;
 
     return (
       <div className="site-card-border-less-wrapper">
@@ -95,10 +149,14 @@ class Interview extends React.Component {
             htmlType: "submit",
           }}
         >
-          <AddForm submit_add_form={this.submit_add_form} />
+          <AddForm
+            submit_add_form={this.submit_add_form}
+            interviewees={interviewees}
+            interviewers={interviewers}
+          />
         </Modal>
         <CustomTable
-          dataSource={this.state.data}
+          dataSource={data}
           columns={columns}
           title="Interviews"
           show_add_modal={this.show_add_modal}

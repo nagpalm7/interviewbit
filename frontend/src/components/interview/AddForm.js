@@ -5,13 +5,13 @@ class AddForm extends React.Component {
   render() {
     const { Option } = Select;
     const { RangePicker } = DatePicker;
-
+    const { submit_add_form, interviewers, interviewees } = this.props;
     return (
       <div>
         <Form
           layout="vertical"
           name="add_form"
-          onFinish={this.props.submit_add_form}
+          onFinish={submit_add_form}
           id="add-form"
         >
           <Form.Item
@@ -50,7 +50,9 @@ class AddForm extends React.Component {
             ]}
           >
             <Select allowClear>
-              <Select.Option value="demo">Demo</Select.Option>
+              {interviewers.map((interviewer) => (
+                <Option value={interviewer.key}>{interviewer.name}</Option>
+              ))}
             </Select>
           </Form.Item>
           <Form.Item
@@ -64,7 +66,9 @@ class AddForm extends React.Component {
             ]}
           >
             <Select allowClear>
-              <Option value="demo">Demo</Option>
+              {interviewees.map((interviewee) => (
+                <Option value={interviewee.key}>{interviewee.name}</Option>
+              ))}
             </Select>
           </Form.Item>
         </Form>
