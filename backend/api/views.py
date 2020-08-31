@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from django.core.mail import send_mail, EmailMessage
+from app.settings import EMAIL_HOST_USER
 from django.shortcuts import render
 from .serializers import *
 from rest_framework import viewsets, filters, status
@@ -103,13 +105,14 @@ class InterviewList(APIView):
         start = request.data['start']
         end = request.data['end']
         interviewer = request.data['interviewer']
+        interviewee = request.data['interviewee']
         # Check whether slot is available or not for the interviewer
-        interviews = Interview.objects.filter(interviewer=interviewer).filter(
+        interviews = Interview.objects.filter(interviewer__id=interviewer).filter(
             start__lte=end).filter(end__gte=start)
 
         if len(interviews):
             bookedslots = Interview.objects.filter(
-                interviewer=interviewer).filter(start__gte=start)[:10]
+                interviewer__id=interviewer).filter(start__gte=start)[:10]
             slots = []
             for interview in bookedslots:
                 slots.append([interview.start, interview.end])
@@ -121,6 +124,15 @@ class InterviewList(APIView):
         serializer = AddInterviewSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            subject = "Interview Schedule"
+            content = """
+            Respected Sir/Madam, <br>
+            This is to inform that an interview has been scheduled from {} to {}
+            """.format(start, end)
+            interviewee_details = Interviewee.objects.get(pk=interviewee)
+            interviewer_details = Interviewer.objects.get(pk=interviewer)
+            email = [interviewer_details.email, interviewee_details.email]
+            send_email(subject, content, email)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -144,12 +156,12 @@ class InterviewDetail(APIView):
         end = request.data['end']
         interviewer = request.data['interviewer']
         # Check whether slot is available or not for the interviewer
-        interviews = Interview.objects.filter(interviewer=interviewer).filter(
+        interviews = Interview.objects.filter(interviewer__id=interviewer).filter(
             start__lte=end).filter(end__gte=start).exclude(pk=pk)
 
         if len(interviews):
             bookedslots = Interview.objects.filter(
-                interviewer=interviewer).filter(start__gte=start).exclude(pk=pk)[:10]
+                interviewer__id=interviewer).filter(start__gte=start).exclude(pk=pk)[:10]
             slots = []
             for interview in bookedslots:
                 slots.append([interview.start, interview.end])
@@ -167,3 +179,13 @@ class InterviewDetail(APIView):
         interview = self.get_object(pk)
         interview.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# Helper function to send email
+def send_email(subject, content, recipient_list, path=None):
+    email_from = EMAIL_HOST_USER
+    mail = EmailMessage(subject, content, email_from, recipient_list)
+    mail.content_subtype = 'html'
+    if path:
+        mail.attach_file(path)
+    mail.send()

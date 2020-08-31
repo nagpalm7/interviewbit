@@ -132,4 +132,4 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'westwidenovelty'
-EMAIL_HOST_PASSWORD = 'P@ssw0rd0820s'
+EMAIL_HOST_PASSWORD = 'P@ssw0rd0820'

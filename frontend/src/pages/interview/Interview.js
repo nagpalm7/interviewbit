@@ -49,8 +49,8 @@ class Interview extends React.Component {
               name: interview.name,
               interviewer: interview.interviewer.name,
               interviewee: interview.interviewee.name,
-              start: moment(interview.start).format("Y-M-d H:M:S"),
-              end: moment(interview.end).format("Y-M-d H:M:S"),
+              start: interview.start,
+              end: interview.end,
             };
             data.push(data_object);
           });
@@ -147,11 +147,7 @@ class Interview extends React.Component {
               let msg = e.errors.date[0];
               let slots = [];
               for (var slot in e.errors.booked_slots) {
-                slots.push(
-                  moment(slot[0]).format("Y-M-d H:M:S") +
-                    " - " +
-                    moment(slot[1]).format("Y-M-d H:M:S")
-                );
+                slots.push(slot[0] + " - " + slot[1]);
               }
               this.add_form_ref.current.setFields([
                 {
@@ -220,11 +216,7 @@ class Interview extends React.Component {
               let msg = e.errors.date[0];
               let slots = [];
               for (var slot in e.errors.booked_slots) {
-                slots.push(
-                  moment(slot[0]).format("Y-M-d H:M:S") +
-                    " - " +
-                    moment(slot[1]).format("Y-M-d H:M:S")
-                );
+                slots.push(slot[0] + " - " + slot[1]);
               }
               this.edit_form_ref.current.setFields([
                 {
