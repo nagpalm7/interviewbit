@@ -1,9 +1,10 @@
 import React from "react";
 import axios from "axios";
+import CustomTable from "../../components/Table/Table";
 
 const url = "http://localhost:8000/api/interview/";
 
-class CustomTable extends React.Component {
+class Interview extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -36,7 +37,7 @@ class CustomTable extends React.Component {
   }
 }
 
-export default CustomTable;
+export default Interview;
 
 const dataSource = [
   {
