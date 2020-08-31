@@ -95,21 +95,29 @@ class IntervieweeDetail(APIView):
 # Interview Views for CRUD
 class InterviewList(APIView):
     def get(self, request, format=None):
-        interviews = Interview.objects.all().order_by('name')
+        interviews = Interview.objects.all().order_by('-id')
         serializer = InterviewSerializer(interviews, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        print(request.data)
         start = request.data['start']
         end = request.data['end']
         interviewer = request.data['interviewer']
         # Check whether slot is available or not for the interviewer
         interviews = Interview.objects.filter(interviewer=interviewer).filter(
             start__lte=end).filter(end__gte=start)
+
         print(len(interviews), interviews)
         if len(interviews):
-            return Response({'errors': {'date': ['This time slot is already taken.']}},
+            bookedslots = Interview.objects.filter(
+                interviewer=interviewer).filter(start__gte=start)[:10]
+            slots = []
+            for interview in bookedslots:
+                slots.append([interview.start, interview.end])
+            for interview in interviews:
+                slots.append([interview.start, interview.end])
+            return Response({'errors': {'date': ['This time slot is already taken.'],
+                                        'booked_slots': slots}},
                             status=status.HTTP_400_BAD_REQUEST)
         serializer = AddInterviewSerializer(data=request.data)
         if serializer.is_valid():
