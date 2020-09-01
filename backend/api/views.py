@@ -8,6 +8,7 @@ from rest_framework import viewsets, filters, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.http import Http404
+from datetime import datetime
 
 
 # Create your views here.
@@ -116,6 +117,8 @@ class InterviewList(APIView):
         serializer = AddInterviewSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            start = datetime.strptime(start, "%Y-%m-%dT%H:%M:%S.%fZ")
+            end = datetime.strptime(end, "%Y-%m-%dT%H:%M:%S.%fZ")
             subject = "Interview Schedule"
             content = """
             Respected Sir/Madam, <br>
@@ -157,6 +160,8 @@ class InterviewDetail(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
         if serializer.is_valid():
             serializer.save()
+            start = datetime.strptime(start, "%Y-%m-%dT%H:%M:%S.%fZ")
+            end = datetime.strptime(end, "%Y-%m-%dT%H:%M:%S.%fZ")
             subject = "Interview Schedule Updated"
             content = """
             Respected Sir/Madam, <br>
