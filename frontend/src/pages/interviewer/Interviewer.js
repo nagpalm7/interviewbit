@@ -91,7 +91,7 @@ class Interviewer extends React.Component {
   show_confirm_delete = (id) => {
     const { confirm } = Modal;
     confirm({
-      title: "Do you Want to delete this interview?",
+      title: "Do you Want to delete this interviewer?",
       icon: <ExclamationCircleOutlined />,
       onOk: () => {
         this.handle_delete(id);
@@ -140,7 +140,7 @@ class Interviewer extends React.Component {
         <CustomTable
           dataSource={data}
           columns={columns}
-          title="Interviewerss"
+          title="Interviewers"
           show_add_modal={this.show_add_modal}
           show_confirm_delete={this.show_confirm_delete}
           hide_edit={true}
