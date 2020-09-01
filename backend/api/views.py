@@ -15,7 +15,7 @@ from django.http import Http404
 # Interviewer Views for CRUD
 class InterviewerList(APIView):
     def get(self, request, format=None):
-        interviewers = Interviewer.objects.all().order_by('name')
+        interviewers = Interviewer.objects.all().order_by('-pk')
         serializer = InterviewerSerializer(interviewers, many=True)
         return Response(serializer.data)
 
@@ -56,7 +56,7 @@ class InterviewerDetail(APIView):
 # Interviewee Views for CRUD
 class IntervieweeList(APIView):
     def get(self, request, format=None):
-        interviewees = Interviewee.objects.all().order_by('name')
+        interviewees = Interviewee.objects.all().order_by('-pk')
         serializer = IntervieweeSerializer(interviewees, many=True)
         return Response(serializer.data)
 
