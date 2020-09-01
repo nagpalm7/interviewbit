@@ -38,7 +38,11 @@ class CustomTable extends React.Component {
               key="action"
               render={(text, record) => (
                 <Space size="middle">
-                  <Button onClick={() => show_edit_modal(record)}>Edit</Button>
+                  {!this.props.hide_edit && (
+                    <Button onClick={() => show_edit_modal(record)}>
+                      Edit
+                    </Button>
+                  )}
                   <Button onClick={() => show_confirm_delete(record.key)}>
                     Delete
                   </Button>
